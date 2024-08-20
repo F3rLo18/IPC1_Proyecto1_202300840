@@ -7,6 +7,9 @@ public class Investigador {
     private String genero;
     private String contrasenia;
     private boolean isAdmin;
+    private String experimentos = " 0 ";
+
+    
     public Investigador(String codigo, String nombre, String genero, String contrasenia, boolean isAdmin) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -16,7 +19,7 @@ public class Investigador {
     }
     //Método para obtener la información del investigador, en una linea de texto separada por comas
     public String toCSV(){
-        return this.codigo+","+this.nombre+","+this.genero+","+this.contrasenia;
+        return this.codigo+","+this.nombre+","+this.genero+","+this.experimentos;
     }
     //Getters para obtener la info del investigador, servirá para el módulo de modificación...
     public String getCodigo() {

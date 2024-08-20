@@ -93,7 +93,7 @@ public class moduloLogin extends JFrame{
                 moduloAdministrador ventanaAdmin = new moduloAdministrador();
                 ventanaAdmin.setVisible(true);
                 dispose();
-                
+
             }
         
             }

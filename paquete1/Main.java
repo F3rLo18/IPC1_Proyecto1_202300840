@@ -7,7 +7,5 @@ public class Main {
         moduloLogin ventanaLogin= new moduloLogin();
         ventanaLogin.setVisible(true);
         
-
-
     }
 }
