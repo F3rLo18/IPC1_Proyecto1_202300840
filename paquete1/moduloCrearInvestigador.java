@@ -1,12 +1,8 @@
 package paquete1;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -14,24 +10,23 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTextField;
 
 public class moduloCrearInvestigador extends JFrame{
+    //-------------------------------------Creación de variables globales------------------------------------
     private String fuente = "Cascadia Code SemiBold";
     private JPanel panel;
-
     private int codigoAutoSet= ListaInvestigadores.getCantidad();
+    //----------------------------------------Constructor de la clase----------------------------------------
     public moduloCrearInvestigador(){
-
         this.setSize(600,800);
         this.setTitle("Crear Investigador");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
         iniciarComponentes();
     }
+    //-----------------------------------Métodos de inicialización de componentes----------------------------
     private void iniciarComponentes(){
         crearPanel();
         crearEtiquetas();
@@ -70,10 +65,11 @@ public class moduloCrearInvestigador extends JFrame{
         etiquetacontrasenia.setFont(new Font(fuente, 0, 35));
         panel.add(etiquetacontrasenia);
     }
+    //--------------------------------------Métodos con entradas y acciones---------------------------------
     @SuppressWarnings("unchecked")
     private void crearCajasDeTexto(){
         JTextField cajaCodigo = new JTextField();
-        cajaCodigo.setText("QI-"+String.valueOf(codigoAutoSet));
+        cajaCodigo.setText("QI-"+codigoAutoSet);
         cajaCodigo.setEnabled(false);
         cajaCodigo.setBounds(250,150,300,45);
         cajaCodigo.setFont(new Font(fuente, 0, 35));
@@ -104,31 +100,29 @@ public class moduloCrearInvestigador extends JFrame{
         panel.add(botonCrear);
         listenerBoton(cajaCodigo, cajaNombre, cajaGenero, cajaContra, botonCrear);
     }
-
-    private void listenerBoton(JTextField codigo, JTextField nombre, JComboBox genero, JPasswordField contrasenia, JButton boton){
+    //---------------------------Método para añadir listener de creación--------------------------------
+    private void listenerBoton(JTextField codigo, JTextField nombre, @SuppressWarnings("rawtypes") JComboBox genero, JPasswordField contrasenia, JButton boton){
         ActionListener listenerBotonCrear = new ActionListener() {
             String generoTxt; 
-            @Override
-            public void actionPerformed(ActionEvent e) {
+        @Override
+        public void actionPerformed(ActionEvent e) {
             
-            
-        if(codigo.getText().equals("") || nombre.getText().equals("") || contrasenia.getPassword().equals("")){
+        String contra= new String(contrasenia.getPassword());
+        //Si las cajas están vacías, el programa no realizará acción alguna.
+        if(codigo.getText().equals("") || nombre.getText().equals("") || contra.equals("")){
             JOptionPane.showMessageDialog(null, "Porfavor llene los campos");
             nombre.setBackground(new Color(239, 170, 170));
             contrasenia.setBackground(new Color(239, 170, 170));
         }
+        //Si las cajas están llenas, se procede a la creación del nuevo investigador
         else{
             if(genero.getSelectedIndex()==1){generoTxt = "Mujer";}else{ generoTxt= "Hombre" ;}
-            String contra= new String (contrasenia.getPassword());
             ListaInvestigadores.agregarInvestigador(codigo.getText(), nombre.getText(), generoTxt, contra);
             JOptionPane.showMessageDialog(null, "Investigador creado correctamente!!");
             codigoAutoSet++;
-            codigo.setText("QI-"+ String.valueOf(codigoAutoSet));
+            codigo.setText("QI-"+ codigoAutoSet); //Se incrementa el contador de investigadores para el siguiente registro
         }
-            
-        
-        }
-            
+        }  
         };
         boton.addActionListener(listenerBotonCrear);
     }

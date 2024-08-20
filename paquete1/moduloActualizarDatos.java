@@ -1,43 +1,42 @@
 package paquete1;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class moduloActualizarDatos extends JFrame {
+    //--------------------------------------Creación de variables globales-----------------------------------------
     private JPanel panel;   
     private String fuente = "Cascadia Code SemiBold";
+    //----------------------------------------Constructor de la clase----------------------------------------------
     public moduloActualizarDatos(){
         this.setSize(600,800);
         this.setTitle("Actualizar datos de investigador");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-
         iniciarComponentes();
     }
+    //--------------------------Método para establecer los componentes de la ventana---------------------------------
     private void iniciarComponentes(){
         iniciarPanel();
         iniciarEtiquetas();
         iniciarCajasDeTexto();
     }
+    //---------------------------------Métodos de inicialización de componentes--------------------------------------
     private void iniciarPanel(){
         panel= new JPanel();
         panel.setSize(600,800);
         panel.setBackground(new Color(130, 215, 147));
         panel.setLayout(null);
         this.getContentPane().add(panel);
-
     }
     private void iniciarEtiquetas(){
         JLabel etiquetaEditar= new JLabel("Editar investigador");
@@ -62,7 +61,8 @@ public class moduloActualizarDatos extends JFrame {
         panel.add(etiquetaContra);
         
     }
-    
+    //--------------------------Métodos de establecimiento de valores a tomar y registrar----------------------------
+    @SuppressWarnings("unchecked")
     private void iniciarCajasDeTexto(){
     JTextField cajaCodigo = new JTextField();
         cajaCodigo.setBounds(250,150,120,45);
@@ -79,6 +79,7 @@ public class moduloActualizarDatos extends JFrame {
         JComboBox cajaGenero = new JComboBox<>();
         cajaGenero.addItem("Hombre");
         cajaGenero.addItem("Mujer");
+
         cajaGenero.setEnabled(false);
         cajaGenero.setBounds(250,350,300,45);
         cajaGenero.setFont(new Font(fuente, 0, 35));
@@ -106,7 +107,8 @@ public class moduloActualizarDatos extends JFrame {
         crearListenerBuscar(botonBuscar,cajaCodigo,cajaNombre,cajaGenero,cajaContra,botonActualizar);
         crearListenerActualizar(botonActualizar, cajaCodigo, cajaNombre, cajaGenero, cajaContra,botonBuscar);
     }
-    private void crearListenerBuscar(JButton boton,JTextField cajaCodigo,JTextField cajaNombre,JComboBox cajaGenero,JTextField cajaContra,JButton botonActualizar){
+    //----------------------------Método para añadir Listener de opción de buscar Investigador--------------------------
+    private void crearListenerBuscar(JButton boton,JTextField cajaCodigo,JTextField cajaNombre,@SuppressWarnings("rawtypes") JComboBox cajaGenero,JTextField cajaContra,JButton botonActualizar){
         ActionListener oyenteBuscar = new ActionListener() {
 
             @Override
@@ -142,7 +144,8 @@ public class moduloActualizarDatos extends JFrame {
         };
         boton.addActionListener(oyenteBuscar);
     }
-    private void crearListenerActualizar(JButton boton,JTextField cajaCodigo , JTextField cajaNombre,JComboBox cajaGenero,JTextField cajaContra,JButton botonBuscar){
+    //-----------------------------Método para añadir Listener de confirmación de cambios-------------------------------
+    private void crearListenerActualizar(JButton boton,JTextField cajaCodigo , JTextField cajaNombre,@SuppressWarnings("rawtypes") JComboBox cajaGenero,JTextField cajaContra,JButton botonBuscar){
         ActionListener oyente= new ActionListener() {
 
             @Override

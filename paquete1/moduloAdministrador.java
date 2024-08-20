@@ -1,5 +1,4 @@
 package paquete1;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -9,13 +8,11 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.Border;
@@ -23,8 +20,8 @@ import javax.swing.table.DefaultTableModel;
 
 public class moduloAdministrador extends JFrame{
     private String fuente="Cascadia Code SemiBold";
-    private static JPanel panelGeneral;
-    private static JPanel panelInvestigadores;
+    private JPanel panelGeneral;
+    private JPanel panelInvestigadores;
     private JPanel panelMuestras;
     private JPanel panelAsignacionExpos;
     private JPanel panelPatrones;

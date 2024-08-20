@@ -1,6 +1,4 @@
 package paquete1;
-
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -8,16 +6,16 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collection;
+
 public class moduloLogin extends JFrame{
+    //--------------------------------------Creación de variables globales-----------------------------------------
     private JPanel panel;
     private String fuente="Cascadia Code SemiBold";
+    //----------------------------------------Constructor de la clase----------------------------------------------
     public moduloLogin(){
         this.setSize(800,600);
         this.setTitle("Login-IPC Quimik");
@@ -26,6 +24,7 @@ public class moduloLogin extends JFrame{
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         inicializarComponentes();
     }
+    //--------------------------Métodos para establecer los componentes de la ventana---------------------------------
     private void inicializarComponentes(){
         crearPanel();
         crearEtiquetas();
@@ -60,6 +59,7 @@ public class moduloLogin extends JFrame{
         etiquetaContrasenia.setFont(new Font(fuente, 0, 40));
         panel.add(etiquetaContrasenia);
     }
+    //---------------------------Métodos de establecimiento de valores y comprobar-----------------------------------
     private void crearCajasDeTexto(){
         JTextField cajaCodigo= new JTextField();
         cajaCodigo.setBounds(350,250,300,50);
@@ -76,30 +76,32 @@ public class moduloLogin extends JFrame{
         listenerBoton(botonIniciarSesion,cajaCodigo,cajaContrasenia);
         panel.add(botonIniciarSesion);
     }
-
+//-------------------------------Método para añadir Listener de inicio de sesión-------------------------------------
    private void listenerBoton(JButton boton, JTextField cajaCodigo, JPasswordField contrasenia){
-    
     ActionListener oyenteBoton= new ActionListener() {
-
         @Override
         public void actionPerformed(ActionEvent e) {
         String contra= new String(contrasenia.getPassword());
-        if(ListaInvestigadores.comprobarIdentidad(cajaCodigo.getText())){
+        if(ListaInvestigadores.comprobarIdentidad(cajaCodigo.getText())){ //Si el código ingresado existe en el sistema
             JOptionPane.showMessageDialog(null,"El usuario ha sido encontrado en los datos");
-            if(ListaInvestigadores.comprobarContrasenia(contra,ListaInvestigadores.obtenerPosicion(cajaCodigo.getText()))){
-            JOptionPane.showMessageDialog(null,"Contraseña correcta!!");
-            if(ListaInvestigadores.listaInvestigadores.get(ListaInvestigadores.obtenerPosicion(cajaCodigo.getText())).isAdmin()){
-                JOptionPane.showMessageDialog(null, "Mostrando panel de administrador: ");
-                moduloAdministrador ventanaAdmin = new moduloAdministrador();
-                ventanaAdmin.setVisible(true);
-                dispose();
-
-            }
-        
-            }
+            if(ListaInvestigadores.comprobarContrasenia(contra,ListaInvestigadores.obtenerPosicion(cajaCodigo.getText()))){//Si la contraseña es correcta
+                JOptionPane.showMessageDialog(null,"Contraseña correcta!!");
+                 if(ListaInvestigadores.listaInvestigadores.get(ListaInvestigadores.obtenerPosicion(cajaCodigo.getText())).isAdmin()){//Si el código es de administrador
+                      JOptionPane.showMessageDialog(null, "Entrando al módulo de administrador... ");
+                      moduloAdministrador ventanaAdmin = new moduloAdministrador();
+                      ventanaAdmin.setVisible(true);
+                      dispose();
+                    }
+                    else{ //Si el código ingresado es correcto, contraseña correcta y Es un usuario común: 
+                        JOptionPane.showMessageDialog(null, "Entrando al módulo de Investigador...");
+                    }
+            }//Si la contraseña ingresada es incorrecta
             else{
                 JOptionPane.showMessageDialog(null, "Contraseña incorrecta...");
             }
+        }
+        else{//Si el código ingresado no existe en el sistema
+            JOptionPane.showMessageDialog(null, "El usuario ingresado no existe en el sistema...");
         }
     }
     };

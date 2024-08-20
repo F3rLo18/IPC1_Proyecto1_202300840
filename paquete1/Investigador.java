@@ -1,6 +1,5 @@
 package paquete1;
 
-
 public class Investigador {
     private String codigo;
     private String nombre;
@@ -9,7 +8,7 @@ public class Investigador {
     private boolean isAdmin;
     private String experimentos = " 0 ";
 
-    
+    //------------------------------------------Constructor de la clase------------------------------------------
     public Investigador(String codigo, String nombre, String genero, String contrasenia, boolean isAdmin) {
         this.codigo = codigo;
         this.nombre = nombre;
@@ -17,11 +16,11 @@ public class Investigador {
         this.isAdmin= isAdmin;
         this.contrasenia = contrasenia;
     }
-    //Método para obtener la información del investigador, en una linea de texto separada por comas
+    //-------------------Método para obtener la información del investigador en formato CSV------------------------
     public String toCSV(){
         return this.codigo+","+this.nombre+","+this.genero+","+this.experimentos;
     }
-    //Getters para obtener la info del investigador, servirá para el módulo de modificación...
+    //--------------------------------------------Métodos getter----------------------------------------------------
     public String getCodigo() {
         return codigo;
     }
@@ -37,7 +36,7 @@ public class Investigador {
     public boolean isAdmin() {
         return isAdmin;
     }
-    //Setters para modificar la información 
+    //--------------------------------------------Métodos setter---------------------------------------------------
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
@@ -47,6 +46,6 @@ public class Investigador {
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
     }
-    
 
+    
 }
