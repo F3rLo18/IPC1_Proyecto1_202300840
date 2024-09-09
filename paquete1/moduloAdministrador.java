@@ -1,6 +1,7 @@
 package paquete1;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Desktop.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -11,9 +12,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,16 +30,23 @@ public class moduloAdministrador extends JFrame{
     Color frente= new Color(119, 213, 163);
     private int panelActivo=0;
     private String fuente="Cascadia Code SemiBold";
+    private JComboBox cajaInvestigadores;
+    private JComboBox cajaMuestras;
     private JPanel panelGeneral;
     private JPanel panelInvestigadores;
     private JPanel panelMuestras = new JPanel();
     private JPanel panelAsignacionExpos= new JPanel();
     private JPanel panelPatrones= new JPanel();
+
     private JTable tabla;
-    DefaultTableModel modeloTablaInvestigadores;
-    private DefaultTableModel modelo;
+    private DefaultTableModel modeloTablaInvestigadores;
+    private DefaultTableModel modelo; //Para la carga de datos
+
     private JTable tablaMuestras;
-    DefaultTableModel modeloTablaMuestras;
+    private DefaultTableModel modeloTablaMuestras;
+
+    private JTable tablaPatrones;
+    private DefaultTableModel modeloTablaPatrones;
 
     private boolean panelMuestrasActivado=false;
     private boolean panelAsignacionActivado=false;
@@ -221,14 +232,22 @@ public class moduloAdministrador extends JFrame{
         MouseListener oyente= new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                panelInvestigadores.setVisible(true);
+                panelInvestigadores.setVisible(false);
                 panelMuestras.setVisible(false);
-                panelAsignacionExpos.setVisible(false);
+                panelAsignacionExpos.setVisible(true);
                 panelPatrones.setVisible(false);
                 panelActivo=2;
                 etiqueta2.setBackground(fondo);
                 etiqueta3.setBackground(fondo);
                 etiqueta4.setBackground(fondo);
+                if(!panelAsignacionActivado){
+                    iniciarComponentesPanelAsignacion();
+                    panelAsignacionActivado=true;
+                }
+                else{
+                    iniciarBotonesAsignacion();
+                }
+                
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -264,14 +283,18 @@ public class moduloAdministrador extends JFrame{
         MouseListener oyente= new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                panelInvestigadores.setVisible(true);
+                panelInvestigadores.setVisible(false);
                 panelMuestras.setVisible(false);
                 panelAsignacionExpos.setVisible(false);
-                panelPatrones.setVisible(false);
+                panelPatrones.setVisible(true);
                 panelActivo=3;
                 etiqueta2.setBackground(fondo);
                 etiqueta3.setBackground(fondo);
                 etiqueta4.setBackground(fondo);
+                if(!panelPatronesActivado){
+                    iniciarComponentesPanelPatrones();
+                    panelPatronesActivado=true;
+                }
             }
             @Override
             public void mousePressed(MouseEvent e) {
@@ -303,7 +326,6 @@ public class moduloAdministrador extends JFrame{
         };
         etiqueta.addMouseListener(oyente);
     }
-
 
 //-------------------------Iniciando los componentes del panel de Investigadores------------------------
     private void iniciarComponentesPanelInvestigadores(){
@@ -445,11 +467,13 @@ public class moduloAdministrador extends JFrame{
     private void iniciarTablaPanelMuestras(){
         modeloTablaMuestras= new DefaultTableModel();
         JScrollPane scrollTabla= new JScrollPane();
-        String []titulos= {"Código","Descripción","Estado","Acciones"};
+        String []titulos= {"Código","Descripción","Estado"};
         modeloTablaMuestras.setColumnIdentifiers(titulos);
+
         tablaMuestras= new JTable(modeloTablaMuestras);
-        tabla.setBounds(25,20,700,400);
+        tablaMuestras.setBounds(25,20,700,400);
         scrollTabla.setBounds(25,20,700,400);
+
         scrollTabla.setViewportView(tablaMuestras);
         panelMuestras.add(scrollTabla);
     }
@@ -468,14 +492,20 @@ public class moduloAdministrador extends JFrame{
         crearListenerCrearMuestras(botonCrear);
         crearListenerCargarMuestras(botonCargar);
     }
+    //------------------------------------Acciones de botón del panel "Muestras"--------------------------------
     private void crearListenerCrearMuestras(JButton botonCrear){
         ActionListener oyenteBoton= new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                moduloCrearMuestra ventanaCrearMuestra= new moduloCrearMuestra();
-                ventanaCrearMuestra.setVisible(true);
-            }
+                if(ListaPatrones.getCantidad()==0){
+                    JOptionPane.showMessageDialog(null,"Para crear muestras antes debe de crear patrones...");
+                }
+                else{
+                    moduloCrearMuestra ventanaCrearMuestra= new moduloCrearMuestra();
+                    ventanaCrearMuestra.setVisible(true);    
+                }
+                }
         };
         botonCrear.addActionListener(oyenteBoton);
     }
@@ -506,6 +536,194 @@ public class moduloAdministrador extends JFrame{
             
         };
         boton.addActionListener(oyenteBoton);
+    }
+//------------------------------------------Inicialización de los componentes del panel de asignación de experimentos------------------------------------
+    private void iniciarComponentesPanelAsignacion(){
+            iniciarPanelAsignacion();
+            iniciarEtiquetasPanelAsignaciones();
+            iniciarBotonesAsignacion();
+    }
+    private void iniciarPanelAsignacion(){
+        panelAsignacionExpos= new JPanel();
+        panelAsignacionExpos.setBounds(0,50,1200,600);
+        panelAsignacionExpos.setBackground(new Color(119, 213, 163));
+        panelAsignacionExpos.setLayout(null);
+        panelGeneral.add(panelAsignacionExpos);
+    }
+    private void iniciarEtiquetasPanelAsignaciones(){
+        JLabel etiquetaInvestigador= new JLabel("Investigador: ");
+        etiquetaInvestigador.setBounds(100,150,350,60);
+        etiquetaInvestigador.setFont(new Font(fuente, 0, 50));
+        panelAsignacionExpos.add(etiquetaInvestigador);
+
+        JLabel etiquetaMuestra= new JLabel("Muestra: ");
+        etiquetaMuestra.setBounds(100,250,250,60);
+        etiquetaMuestra.setFont(new Font(fuente, 0, 50));
+        panelAsignacionExpos.add(etiquetaMuestra);
+    }
+    private void iniciarBotonesAsignacion(){
+        if(!panelAsignacionActivado){
+            cajaInvestigadores= new JComboBox<>(ListaInvestigadores.toStringTodosNombres());
+            cajaInvestigadores.setBounds(450,150,350,60);
+            cajaInvestigadores.setFont(new Font(fuente, 0, 50));
+            panelAsignacionExpos.add(cajaInvestigadores);        
+            
+            cajaMuestras= new JComboBox<>(ListaMuestras.toStringTodasMuestras());
+            cajaMuestras.setBounds(450,250,350,60);
+            cajaMuestras.setFont(new Font(fuente, 0, 50));
+            panelAsignacionExpos.add(cajaMuestras);        
+            
+        }
+        else{
+            cajaInvestigadores.removeAllItems();
+            DefaultComboBoxModel<String> modelll= new DefaultComboBoxModel<>(ListaInvestigadores.toStringTodosNombres());
+            cajaInvestigadores.setModel(modelll);
+            cajaMuestras.removeAllItems();
+            DefaultComboBoxModel<String> modellll= new DefaultComboBoxModel<>(ListaMuestras.toStringTodasMuestras());
+            cajaMuestras.setModel(modellll);
+        }
+    JButton botonAsignar= new JButton();
+    botonAsignar.setText("Asignar");
+    botonAsignar.setBounds(350,350,250,80);
+    botonAsignar.setFont(new Font(fuente, 0, 50));
+    panelAsignacionExpos.add(botonAsignar);
+
+        crearListenerAsignarMuestra(botonAsignar);
+    }
+
+    private void crearListenerAsignarMuestra(JButton boton){
+        ActionListener oyente= new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            if(ListaMuestras.getCantidad()==0){
+                JOptionPane.showMessageDialog(null, "Para asignar una muestra antes debe de crear alguna...");
+            }
+            else{
+                if(cajaInvestigadores.getSelectedItem().equals("admin")){
+                JOptionPane.showMessageDialog(null,"El administrador no puede tener muestras asignadas....");
+                }
+                else{
+                   if(ListaMuestras.listaMuestras.get(ListaMuestras.obtenerPosicion((String)cajaMuestras.getSelectedItem())).isAsignado()){ //Si la muestra ya fué asignada
+            JOptionPane.showMessageDialog(null,"Esta muestra ya ha sido asignada a un investigador");
+            }
+            else{
+            ListaInvestigadores.asignarMuestra((String) cajaInvestigadores.getSelectedItem(), (String) cajaMuestras.getSelectedItem());
+            JOptionPane.showMessageDialog(null,"Se ha asignado la muestra al investigador correctamente");
+            } 
+                }
+
+            }
+
+            
+
+            
+            
+            }
+            
+        };
+        boton.addActionListener(oyente);
+    }
+
+
+
+//--------------------------------------------------Panel del módulo de patrones--------------------------------------------
+private void iniciarComponentesPanelPatrones(){
+    iniciarPanelPatrones();
+    iniciarTablaPanelPatrones();
+    iniciarBotonesPanelPatrones();
+}
+private void iniciarPanelPatrones(){
+    panelPatrones= new JPanel();
+    panelPatrones.setBounds(0,50,1200,600);
+    panelPatrones.setBackground(new Color(119, 213, 163));
+    panelPatrones.setLayout(null);
+    panelGeneral.add(panelPatrones);
+}
+//---------------------------------------Tabla del módulo de Patrones---------------------------------------------
+    private void iniciarTablaPanelPatrones(){
+        modeloTablaPatrones= new DefaultTableModel();
+        JScrollPane scrollTabla= new JScrollPane();
+        String []titulos= {"Código","Nombre"};
+        modeloTablaPatrones.setColumnIdentifiers(titulos);
+        tablaPatrones= new JTable(modeloTablaPatrones);
+        tablaPatrones.setBounds(25,20,700,400);
+        scrollTabla.setBounds(25,20,700,400);
+        scrollTabla.setViewportView(tablaPatrones);
+        panelPatrones.add(scrollTabla);
+    }
+    private void iniciarBotonesPanelPatrones(){
+        JButton botonCrear= new JButton();
+        botonCrear.setBounds(750,80,200,80);
+        botonCrear.setText("Crear");
+        botonCrear.setFont(new Font(fuente, 0, 25));
+        panelPatrones.add(botonCrear);
+
+        JButton botonCargar= new JButton();
+        botonCargar.setBounds(980,80,200,80);
+        botonCargar.setText("Cargar");
+        botonCargar.setFont(new Font(fuente, 0, 25));
+        panelPatrones.add(botonCargar);
+        
+        JButton botonEliminar= new JButton();
+        botonEliminar.setBounds(750,180,420,80);
+        botonEliminar.setText("Eliminar");
+        botonEliminar.setFont(new Font(fuente, 0, 25));
+        panelPatrones.add(botonEliminar);
+        
+        crearListenerCrearPatron(botonCrear);
+        crearListenerCargarPatron(botonCargar);
+        crearListenerEliminarPatron(botonEliminar);
+    }
+    private void crearListenerCrearPatron(JButton boton){
+        ActionListener oyente= new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                moduloCrearPatron ventana = new moduloCrearPatron();
+                ventana.setVisible(true);
+            }
+        };
+        boton.addActionListener(oyente);
+    }
+    private void crearListenerCargarPatron(JButton boton){
+        ActionListener oyente= new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                File file = new File("C:\\Users\\josue\\Desktop\\Proyecto1-IPC1-Quimik/patrones.csv");
+                for(int i= modeloTablaPatrones.getRowCount()-1;i>=0;i--){
+                    modeloTablaPatrones.removeRow(i);
+                }
+                try{
+                    String []titulos= {"Código","Nombre"};
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    
+                    modeloTablaPatrones= (DefaultTableModel) tablaPatrones.getModel();
+                    modeloTablaPatrones.setColumnIdentifiers(titulos);
+                    Object[] lineaTabla= br.lines().toArray();
+    
+                    for(int i=0; i<lineaTabla.length; i++){
+                        String linea = lineaTabla[i].toString().trim();
+                        String[] dataRow= linea.split(",");
+                        modeloTablaPatrones.addRow(dataRow);
+                    }
+                }catch (Exception ex){}
+            }
+        };
+        boton.addActionListener(oyente);
+    }
+    private void crearListenerEliminarPatron(JButton boton){
+        ActionListener oyente= new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            moduloEliminarPatron ventana= new moduloEliminarPatron();
+            ventana.setVisible(true);
+            }
+            
+        };
+        boton.addActionListener(oyente);
+
     }
 
 }

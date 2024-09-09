@@ -1,12 +1,15 @@
 package paquete1;
 
+import java.util.ArrayList;
+
 public class Investigador {
     private String codigo;
     private String nombre;
     private String genero;
     private String contrasenia;
     private boolean isAdmin;
-    private String experimentos = " 0 ";
+    private int experimentos=0;
+    public static ArrayList <Muestras> arrayMuestras = new ArrayList<>(); 
 
     //------------------------------------------Constructor de la clase------------------------------------------
     public Investigador(String codigo, String nombre, String genero, String contrasenia, boolean isAdmin) {
@@ -15,6 +18,11 @@ public class Investigador {
         this.genero = genero;
         this.isAdmin= isAdmin;
         this.contrasenia = contrasenia;
+    }
+    //--------------------Método para asignarle una muestra al investigador----------------------------------
+    public void agregarMuestraInvestigador(Muestras muestra){
+        arrayMuestras.add(muestra);
+        experimentos++;
     }
     //-------------------Método para obtener la información del investigador en formato CSV------------------------
     public String toCSV(){

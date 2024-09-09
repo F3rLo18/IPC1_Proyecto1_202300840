@@ -78,14 +78,26 @@ public class ListaInvestigadores {
     public static int getCantidad() {
         return cantidad;
     }
-    
-    
-    
-    
-   
-    
+    //Método para obtener la lista completa de investigadores
+    public static ArrayList<Investigador> getListaInvestigadores() {
+        return listaInvestigadores;
+    }
+    public static String[] toStringTodosNombres(){
+        String[] nombres= new String[listaInvestigadores.size()];
+        int i= 0;
+        for(Investigador investigador: listaInvestigadores){
+        nombres[i] = investigador.getCodigo();
+        i++;
+        }
+        return nombres;
+    }
+    //Método para asignar una muestra al investigador
+    public static void asignarMuestra(String codigoInvestigador, String codigoMuestra){
+        listaInvestigadores.get(obtenerPosicion(codigoInvestigador)).agregarMuestraInvestigador(ListaMuestras.listaMuestras.get(ListaMuestras.obtenerPosicion(codigoMuestra)));
+        ListaMuestras.listaMuestras.get(ListaMuestras.obtenerPosicion(codigoMuestra)).setAsignado(true);
+        ListaMuestras.listaMuestras.get(ListaMuestras.obtenerPosicion(codigoMuestra)).setIndiceInvesAsignado(ListaInvestigadores.obtenerPosicion(codigoInvestigador));
+    }
 
-
-
+    
 
 }

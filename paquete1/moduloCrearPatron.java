@@ -2,32 +2,31 @@ package paquete1;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Desktop.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class moduloCrearMuestra extends JFrame {
+
+public class moduloCrearPatron extends JFrame{
 private String fuente = "Cascadia Code SemiBold";
     private JPanel panel;
-    private int codigoAutoSet= ListaMuestras.getCantidad();
+    private int codigoAutoSet= ListaPatrones.getCantidad();
 
-    public moduloCrearMuestra(){
+    public moduloCrearPatron(){
         this.setSize(600,800);
-        this.setTitle("Crear Investigador");
+        this.setTitle("Crear Patron");
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         iniciarComponentes();
     }
+    
     private void iniciarComponentes(){
         crearPanel();
         crearEtiquetas();
@@ -41,7 +40,7 @@ private String fuente = "Cascadia Code SemiBold";
         this.getContentPane().add(panel);
     }
     private void crearEtiquetas(){
-        JLabel etiquetaCrearMuestra= new JLabel("Crear muestra");
+        JLabel etiquetaCrearMuestra= new JLabel("Crear Patrón");
         etiquetaCrearMuestra.setBounds(100,20,450,60);
         etiquetaCrearMuestra.setFont(new Font(fuente, 0, 50));
         panel.add(etiquetaCrearMuestra);
@@ -51,19 +50,19 @@ private String fuente = "Cascadia Code SemiBold";
         etiquetaCodigo.setFont(new Font(fuente, 0, 35));
         panel.add(etiquetaCodigo);
 
-        JLabel etiquetaDescripcion = new JLabel("Descripcion: ");
-        etiquetaDescripcion.setBounds(20,250,200,45);
-        etiquetaDescripcion.setFont(new Font(fuente, 0, 35));
-        panel.add(etiquetaDescripcion);
-        
-        JLabel etiquetaPatron = new JLabel("Patrón: ");
-        etiquetaPatron.setBounds(85,350,200,45);
+        JLabel etiquetaNombre = new JLabel("Nombre: ");
+        etiquetaNombre.setBounds(90,250,200,45);
+        etiquetaNombre.setFont(new Font(fuente, 0, 35));
+        panel.add(etiquetaNombre);
+
+        JLabel etiquetaPatron = new JLabel("Patron: ");
+        etiquetaPatron.setBounds(90,350,200,45);
         etiquetaPatron.setFont(new Font(fuente, 0, 35));
         panel.add(etiquetaPatron);
     }
     private void crearCajasDeTexto(){
-         JTextField cajaCodigo = new JTextField();
-        cajaCodigo.setText("MQ-"+codigoAutoSet);
+        JTextField cajaCodigo = new JTextField();
+        cajaCodigo.setText("PQ-"+codigoAutoSet);
         cajaCodigo.setEnabled(false);
         cajaCodigo.setBounds(250,150,300,45);
         cajaCodigo.setFont(new Font(fuente, 0, 35));
@@ -73,42 +72,40 @@ private String fuente = "Cascadia Code SemiBold";
         cajaNombre.setBounds(250,250,300,45);
         cajaNombre.setFont(new Font(fuente, 0, 35));
         panel.add(cajaNombre);
-        JComboBox cajaPatron = new JComboBox<>();
 
-        if(ListaPatrones.getCantidad()==0){
+        JTextField cajaPatron = new JTextField();
         cajaPatron.setBounds(250,350,300,45);
         cajaPatron.setFont(new Font(fuente, 0, 35));
         panel.add(cajaPatron);
-        }
-        else{
-        DefaultComboBoxModel<String> modellll= new DefaultComboBoxModel<>(ListaPatrones.toStringTodosPatrones());
-        cajaPatron.setModel(modellll);
-        cajaPatron.setBounds(250,350,300,45);
-        cajaPatron.setFont(new Font(fuente, 0, 35));
-        panel.add(cajaPatron);
-        }
+
+
         JButton botonCrear = new JButton();
         botonCrear.setText("Crear Muestra");
         botonCrear.setBounds(150,450,300,80);
         botonCrear.setFont(new Font(fuente, 0, 30));
         panel.add(botonCrear);
 
-        crearListenerCrear(cajaCodigo,cajaNombre,cajaPatron,botonCrear);
+
+        crearListenerBoton(cajaCodigo,cajaNombre, cajaPatron,botonCrear);
     }
-    private void crearListenerCrear(JTextField codigo,JTextField descripcion,JComboBox patron, JButton boton){
+    private void crearListenerBoton(JTextField codigo,JTextField nombre,JTextField patron, JButton boton){
         ActionListener oyente= new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-            ListaMuestras.agregarmuestra(codigo.getText(), descripcion.getText(), "Ingreso", (String) patron.getSelectedItem() );
-            JOptionPane.showMessageDialog(null,"Muestra creada con éxito");
-            codigoAutoSet++;
-            codigo.setText("MQ-"+ codigoAutoSet);
+                if(codigo.getText().equals("")||nombre.getText().equals("")||patron.getText().equals("")){
+                    JOptionPane.showMessageDialog(null,"Porfavor llene los campos");
+                }
+                else{
+                    ListaPatrones.agregarPatron(codigo.getText(), nombre.getText(), patron.getText());
+                    JOptionPane.showMessageDialog(null, "Patron creado con éxito");
+
+                }
             }
-            
+
         };
         boton.addActionListener(oyente);
     }
-
+    
 
 }

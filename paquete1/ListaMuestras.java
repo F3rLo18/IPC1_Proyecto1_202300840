@@ -9,6 +9,7 @@ public class ListaMuestras {
     private static int cantidadMuestras=0;
     public static ArrayList <Muestras> listaMuestras = new ArrayList<>(); 
     private static File f = new File("C:\\Users\\josue\\Desktop\\Proyecto1-IPC1-Quimik/muestras.csv");
+
 //------------------------------------Método para agregar muestras a la base de datos--------------------------------
     public static void agregarmuestra(String codigo, String descripcion,String estado, String patron){
         Muestras m= new Muestras(codigo, descripcion,estado, patron);
@@ -23,7 +24,19 @@ public class ListaMuestras {
         cantidadMuestras++;
         }
 
-
+//-----------------Método para obtener la posición de un investigador, sabiendo su código------------------
+public static int obtenerPosicion(String codigo){
+    int i=0;  //Si el investigador no existe, la función regresa -1
+    int pos=-1;
+    for (Muestras inv : listaMuestras) {
+        if(inv.getCodigo().equals(codigo)){
+           pos=i;
+           break;
+        }
+        i++;
+    }
+return pos;
+}
 //--------Método para regenerar el archivo CSV con datos actualizados, eliminaciones, cambios...etc-----
 public static void regenerarCSVMuestras(){
     try (FileWriter fw = new FileWriter("C:\\\\Users\\\\josue\\\\Desktop\\\\Proyecto1-IPC1-Quimik/muestras.csv")){
@@ -41,4 +54,17 @@ public static void regenerarCSVMuestras(){
  public static int getCantidad() {
     return cantidadMuestras;
 }
+//--------------------------------------Método para generar los nombres de las muestras en un arreglo de cadenas de texto----------------------
+public static String[] toStringTodasMuestras(){
+    String[] muestras= new String[listaMuestras.size()];
+    int i=0;
+    for(Muestras mue : listaMuestras){
+        muestras[i]= mue.getCodigo();
+        i++;
+    }
+
+return muestras;
+}
+
+
 }
