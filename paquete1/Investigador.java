@@ -44,6 +44,10 @@ public class Investigador {
     public boolean isAdmin() {
         return isAdmin;
     }
+    public int getExpos(){
+        return this.experimentos;
+    }
+    
     //--------------------------------------------Métodos setter---------------------------------------------------
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -53,6 +57,12 @@ public class Investigador {
     }
     public void setContrasenia(String contrasenia) {
         this.contrasenia = contrasenia;
+    }
+    public int getExperimentos() {
+        return experimentos;
+    }
+    public ArrayList<Muestras> getArrayMuestras() {
+        return arrayMuestras;
     }
 
     

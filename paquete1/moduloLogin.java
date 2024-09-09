@@ -94,6 +94,9 @@ public class moduloLogin extends JFrame{
                     }
                     else{ //Si el código ingresado es correcto, contraseña correcta y Es un usuario común: 
                         JOptionPane.showMessageDialog(null, "Entrando al módulo de Investigador...");
+                        moduloInvestigador ventana= new moduloInvestigador();
+                        ventana.setUsuarioActivo(cajaCodigo.getText());
+                        ventana.setVisible(true);
                     }
             }//Si la contraseña ingresada es incorrecta
             else{

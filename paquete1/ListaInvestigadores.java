@@ -97,7 +97,20 @@ public class ListaInvestigadores {
         ListaMuestras.listaMuestras.get(ListaMuestras.obtenerPosicion(codigoMuestra)).setAsignado(true);
         ListaMuestras.listaMuestras.get(ListaMuestras.obtenerPosicion(codigoMuestra)).setIndiceInvesAsignado(ListaInvestigadores.obtenerPosicion(codigoInvestigador));
     }
-
+    //--------------Método para obtener los 3 con más expos*------------
+    /*
+    public static int[] obtenerMejores(){
+    int[] mejores = new int[3];
+    int j=0;
+    for(int i=0;i<listaInvestigadores.size();i++){
+        if(listaInvestigadores.get(i).getExpos()>listaInvestigadores.get(i+1).getExperimentos()){
+        mejores[j]=listaInvestigadores.get(i).getExperimentos();
+        j++;
+        }
+    }
+    return mejores;
+    }
+    */
     
 
 }

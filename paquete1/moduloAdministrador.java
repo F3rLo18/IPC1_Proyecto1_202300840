@@ -384,6 +384,9 @@ public class moduloAdministrador extends JFrame{
         crearListenerActualizar(botonActualizar);
         crearListenerEliminar(botonEliminar);
     }
+    private void iniciarGraficaPanelInvestigadores(){
+        
+    }
     //------------------------------------Acciones de botón del panel "Investigadores"--------------------------------
     private void crearListenerCrear(JButton botonCrear){
         ActionListener oyenteBoton= new ActionListener() {
